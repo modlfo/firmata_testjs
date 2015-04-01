@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html ng-app="Firmata">
+    <style>
+      .wrapper {
+        overflow: hidden;
+      }
+      .pinnumber {
+        margin-left: 20px;
+        float:left;
+        width: 50px;
+      }
+      .pinmode {
+        margin-left: 20px;
+        float:left;
+      }
+      .pincontrol {
+        float:left;
+      }
+      .portlabel {
+        float:left;
+      }
+    </style>
+    <head>
+        <title>Firmata Test</title>
+    </head>
+    <body>
+    <div id="datadiv" ng-controller="PeopleController">
+        <div class="wrapper">
+            <div class="portlabel"> Port : </div>
+            <div>
+                <select ng-model="port" ng-change="selectPort()">
+                    <option ng-repeat="port_name in ports">
+                    {{ port_name }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div>
+            <div ng-repeat="pin in pins" class="wrapper">
+                <div class="pinnumber"> Pin {{$index}} </div>
+                <div class="pinmode">
+                    <select style="width: 80px" value="{{pins[$index].mode}}" ng-model="pins[$index].mode" ng-change="setPinMode($index)">
+                        <option ng-repeat="mode in pin.supportedModes" value="{{modeName[mode]}}">
+                        {{ modeName[mode] }}
+                        </option>
+                    </select>
+                </div>
+                <div class="pincontrol" style="margin-left: {{getMargin($index)}}; width: {{getWidth($index)}}">
+                    <input type="checkbox" style="width: 80px"
+                        ng-checked  = "pinOnOff($index)"
+                        ng-disabled = "isReadOnly($index)"
+                        ng-show     = "isShowHide($index,'checkbox')"
+                        ng-model    = "values[$index]"
+                        ng-change   = "setValue($index)"
+                        ng-true-value  = "255"
+                        ng-false-value = "0"
+                    />
+                    <input type="range" style="width: 80px"
+                        ng-show     = "isShowHide($index,'range')"
+                        ng-model    = "values[$index]"
+                        ng-change   = "setValue($index)"
+                        min         = "0"
+                        max         = "255"
+                    />
+                    <input type="text" style="width: 80px"
+                        ng-show     = "isShowHide($index,'text')"
+                        ng-model    = "values[$index]"
+                        ng-change   = "setValue($index)"
+                    />
+                </div>
+            </div>
+        </div>
+        </body>
+        <script src="node_modules/angular/angular.js"></script>
+        <script src="scripts.js" type="text/javascript"></script>
+    </div>
+</html>
